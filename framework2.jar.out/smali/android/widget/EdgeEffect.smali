@@ -12,7 +12,7 @@
 
 
 # static fields
-.field private static final EPSILON:F = 0.001f
+.field private static final EPSILON:F = 0.0010f
 
 .field private static final HELD_EDGE_ALPHA:F = 0.7f
 
