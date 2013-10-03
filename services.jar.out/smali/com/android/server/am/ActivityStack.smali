@@ -8325,6 +8325,9 @@
     const/4 v2, 0x1
 
     .line 4833
+# hack
+    :cond_miui_add
+#====
     :goto_0
     return v2
 
@@ -8471,6 +8474,19 @@
 
     .line 4767
     :cond_6
+
+# hack needs to be tested
+    iget-object v2, v0, Lcom/android/server/am/ActivityRecord;->info:Landroid/content/pm/ActivityInfo;
+
+    iget-object v2, v2, Landroid/content/pm/ActivityInfo;->packageName:Ljava/lang/String;
+
+    invoke-static {v2, v13, v15}, Landroid/app/MiuiThemeHelper;->needRestartActivity(Ljava/lang/String;ILandroid/content/res/Configuration;)Z
+
+    move-result v2
+
+    if-nez v2, :cond_miui_add
+#==================
+
     move-object/from16 v0, p0
 
     iget-object v2, v0, Lcom/android/server/am/ActivityStack;->mContext:Landroid/content/Context;

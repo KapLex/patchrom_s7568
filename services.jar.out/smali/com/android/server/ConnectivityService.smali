@@ -431,7 +431,10 @@
 
     invoke-direct {v0, v2}, Lcom/android/server/ConnectivityService;->log(Ljava/lang/String;)V
 
+	invoke-static/range {p1 .. p1}, Lcom/miui/server/FirewallService;->setupService(Landroid/content/Context;)V	
+	
     .line 372
+
     new-instance v13, Landroid/os/HandlerThread;
 
     const-string v2, "ConnectivityServiceThread"
@@ -8511,6 +8514,12 @@
     .line 1240
     .local v11, usedNetworkType:I
     move-object/from16 v0, p0
+	
+    invoke-static {}, Lmiui/net/FirewallManager;->getInstance()Lmiui/net/FirewallManager;
+
+    move-result-object v13
+
+    invoke-virtual {v13, v10, v7, v11}, Lmiui/net/FirewallManager;->onStopUsingNetworkFeature(III)V
 
     iget-object v13, v0, Lcom/android/server/ConnectivityService;->mNetTrackers:[Landroid/net/NetworkStateTracker;
 
@@ -15262,7 +15271,24 @@
     monitor-exit p0
     :try_end_0
     .catchall {:try_start_0 .. :try_end_0} :catchall_0
+	
+    # register 18-21 used for onStartUsingNetworkFeature
+    invoke-static {}, Lmiui/net/FirewallManager;->getInstance()Lmiui/net/FirewallManager;
 
+    move-result-object v18
+
+    invoke-static {}, Lcom/android/server/ConnectivityService;->getCallingUid()I
+
+    move-result v19
+
+    invoke-static {}, Lcom/android/server/ConnectivityService;->getCallingPid()I
+
+    move-result v20
+
+    move/from16 v21, v17
+
+    invoke-virtual/range {v18 .. v21}, Lmiui/net/FirewallManager;->onStartUsingNetworkFeature(III)V
+	
     .line 1111
     if-ltz v12, :cond_c
 
