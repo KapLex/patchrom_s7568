@@ -31,9 +31,9 @@
 
 .field private static mKeyguardShowing:Z
 
-.field private static mReboot:Z
+.field static mReboot:Z
 
-.field private static mRebootReason:Ljava/lang/String;
+.field static mRebootReason:Ljava/lang/String;
 
 .field private static mRebootResult:Z
 
@@ -45,9 +45,9 @@
 
 .field private static sIsSamsungAnimation:Z
 
-.field private static sIsStarted:Z
+.field static sIsStarted:Z
 
-.field private static sIsStartedGuard:Ljava/lang/Object;
+.field static sIsStartedGuard:Ljava/lang/Object;
 
 
 # instance fields
@@ -772,9 +772,10 @@
     invoke-virtual {v0, v3, v4}, Landroid/media/AudioManager;->setParameter(Ljava/lang/String;Ljava/lang/String;)V
 
     .line 403
-    new-instance v2, Lcom/android/internal/app/ShutdownThread$4;
+    # it is a Landroid/app/ProgressDialog object in android.
+    new-instance v2, Landroid/app/ProgressDialog;
 
-    invoke-direct {v2, p0}, Lcom/android/internal/app/ShutdownThread$4;-><init>(Landroid/content/Context;)V
+    invoke-direct {v2, p0}, Landroid/app/ProgressDialog;-><init>(Landroid/content/Context;)V
 
     .line 422
     .local v2, pd:Landroid/app/ProgressDialog;
@@ -810,18 +811,15 @@
 
     invoke-virtual {v3, v4}, Landroid/view/Window;->setType(I)V
 
-    .line 428
-    invoke-virtual {v2}, Landroid/app/ProgressDialog;->show()V
+    invoke-static {p0}, Lcom/android/internal/app/ShutdownThread;->createShutDownDialog(Landroid/content/Context;)V
 
-    .line 431
     sget-object v3, Lcom/android/internal/app/ShutdownThread;->sInstance:Lcom/android/internal/app/ShutdownThread;
 
     sput-object p0, Lcom/android/internal/app/ShutdownThread;->mContext:Landroid/content/Context;
 
-    .line 432
     sget-object v4, Lcom/android/internal/app/ShutdownThread;->sInstance:Lcom/android/internal/app/ShutdownThread;
 
-    const-string/jumbo v3, "power"
+    const-string v3, "power"
 
     invoke-virtual {p0, v3}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
 
@@ -1338,6 +1336,11 @@
     .line 179
     .local v5, resourceId:I
     :goto_1
+	
+	invoke-static {v5}, Lcom/android/internal/app/ShutdownThread;->getResourceId(I)I
+
+    move-result v5
+	
     invoke-virtual {p0}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
 
     move-result-object v7
@@ -1437,7 +1440,10 @@
 
     if-eqz v7, :cond_7
 
-    const v7, 0x104017d
+#    const v7, 0x104017d
+    invoke-static {}, Lcom/android/internal/app/ShutdownThread;->getTitleResourceId()I
+
+    move-result v7
 
     :goto_3
     invoke-virtual {v8, v7}, Landroid/app/AlertDialog$Builder;->setTitle(I)Landroid/app/AlertDialog$Builder;
@@ -2193,4 +2199,149 @@
     move-exception v2
 
     goto/16 :goto_3
+.end method
+
+.method private static getResourceId(I)I
+    .locals 1
+    .parameter "id"
+    .annotation build Landroid/annotation/MiuiHook;
+        value = .enum Landroid/annotation/MiuiHook$MiuiHookType;->NEW_METHOD:Landroid/annotation/MiuiHook$MiuiHookType;
+    .end annotation
+
+    .prologue
+    sget-boolean v0, Lcom/android/internal/app/ShutdownThread;->mReboot:Z
+
+    if-eqz v0, :cond_0
+
+    const/high16 p0, 0x60c
+
+    .end local p0
+    :cond_0
+    return p0
+.end method
+
+.method private static getTitleResourceId()I
+    .locals 1
+    .annotation build Landroid/annotation/MiuiHook;
+        value = .enum Landroid/annotation/MiuiHook$MiuiHookType;->NEW_METHOD:Landroid/annotation/MiuiHook$MiuiHookType;
+    .end annotation
+
+    .prologue
+    sget-boolean v0, Lcom/android/internal/app/ShutdownThread;->mReboot:Z
+
+    if-eqz v0, :cond_0
+
+    const v0, 0x60c018c
+
+    :goto_0
+    return v0
+
+    :cond_0
+    const v0, 0x60c0191
+
+    goto :goto_0
+.end method
+
+.method private static createShutDownDialog(Landroid/content/Context;)V
+    .locals 8
+    .parameter "context"
+    .annotation build Landroid/annotation/MiuiHook;
+        value = .enum Landroid/annotation/MiuiHook$MiuiHookType;->NEW_METHOD:Landroid/annotation/MiuiHook$MiuiHookType;
+    .end annotation
+
+    .prologue
+    new-instance v2, Landroid/app/Dialog;
+
+    const v6, 0x10300f1
+
+    invoke-direct {v2, p0, v6}, Landroid/app/Dialog;-><init>(Landroid/content/Context;I)V
+
+    .local v2, bootMsgDialog:Landroid/app/Dialog;
+    invoke-virtual {v2}, Landroid/app/Dialog;->getContext()Landroid/content/Context;
+
+    move-result-object v6
+
+    invoke-static {v6}, Landroid/view/LayoutInflater;->from(Landroid/content/Context;)Landroid/view/LayoutInflater;
+
+    move-result-object v3
+
+    .local v3, layoutInflater:Landroid/view/LayoutInflater;
+    const v6, 0x603002e
+
+    const/4 v7, 0x0
+
+    invoke-virtual {v3, v6, v7}, Landroid/view/LayoutInflater;->inflate(ILandroid/view/ViewGroup;)Landroid/view/View;
+
+    move-result-object v5
+
+    .local v5, view:Landroid/view/View;
+    const v6, 0x60b0021
+
+    invoke-virtual {v5, v6}, Landroid/view/View;->findViewById(I)Landroid/view/View;
+
+    move-result-object v4
+
+    check-cast v4, Landroid/widget/TextView;
+
+    .local v4, msgText:Landroid/widget/TextView;
+    const v6, 0x60b0022
+
+    invoke-virtual {v5, v6}, Landroid/view/View;->findViewById(I)Landroid/view/View;
+
+    move-result-object v1
+
+    check-cast v1, Landroid/widget/ImageView;
+
+    .local v1, animationView:Landroid/widget/ImageView;
+    sget-boolean v6, Lcom/android/internal/app/ShutdownThread;->mReboot:Z
+
+    if-eqz v6, :cond_0
+
+    const v6, 0x60c0001
+
+    invoke-virtual {v4, v6}, Landroid/widget/TextView;->setText(I)V
+
+    :goto_0
+    invoke-virtual {v2, v5}, Landroid/app/Dialog;->setContentView(Landroid/view/View;)V
+
+    const/4 v6, 0x0
+
+    invoke-virtual {v2, v6}, Landroid/app/Dialog;->setCancelable(Z)V
+
+    invoke-virtual {v2}, Landroid/app/Dialog;->getWindow()Landroid/view/Window;
+
+    move-result-object v6
+
+    const/16 v7, 0x7e5
+
+    invoke-virtual {v6, v7}, Landroid/view/Window;->setType(I)V
+
+    invoke-virtual {v2}, Landroid/app/Dialog;->getWindow()Landroid/view/Window;
+
+    move-result-object v6
+
+    const v7, 0x6020034
+
+    invoke-virtual {v6, v7}, Landroid/view/Window;->setBackgroundDrawableResource(I)V
+
+    invoke-virtual {v2}, Landroid/app/Dialog;->show()V
+
+    invoke-virtual {v1}, Landroid/widget/ImageView;->getDrawable()Landroid/graphics/drawable/Drawable;
+
+    move-result-object v0
+
+    check-cast v0, Landroid/graphics/drawable/AnimationDrawable;
+
+    .local v0, animationDrawable:Landroid/graphics/drawable/AnimationDrawable;
+    invoke-virtual {v0}, Landroid/graphics/drawable/AnimationDrawable;->start()V
+
+    return-void
+
+    .end local v0           #animationDrawable:Landroid/graphics/drawable/AnimationDrawable;
+    :cond_0
+    const v6, 0x104015d
+
+    invoke-virtual {v4, v6}, Landroid/widget/TextView;->setText(I)V
+
+    goto :goto_0
 .end method

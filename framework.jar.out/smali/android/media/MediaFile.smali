@@ -192,6 +192,12 @@
 
 .field private static final LAST_VIDEO_FILE_TYPE:I = 0x1e
 
+.field public static final FILE_TYPE_APE:I = 0x3e9
+
+.field private static final FIRST_FFMPEG_AUDIO_FILE_TYPE:I = 0x3e9
+
+.field private static final LAST_FFMPEG_AUDIO_FILE_TYPE:I = 0x3e9
+
 .field private static final LAST_VIDEO_FILE_TYPE2:I = 0xc8
 
 .field public static sCscFeature:Lcom/sec/android/app/CscFeature;

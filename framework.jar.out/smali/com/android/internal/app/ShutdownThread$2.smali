@@ -60,7 +60,8 @@
     move-result v0
 
     if-eqz v0, :cond_1
-
+	if-nez v0, :cond_1
+	
     .line 215
     invoke-static {}, Lcom/android/internal/app/ShutdownThread;->access$400()Landroid/content/Context;
 
